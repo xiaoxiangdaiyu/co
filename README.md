@@ -5,6 +5,7 @@ co函数是generate函数的自动执行器，利用该函数可以避免手动�
 co-cn.js对其源码进行中文注释，方便来者学习。
 ```js
 
+
 /**
  * co
  * Generator函数的自动执行器，会返回一个promise，使用可以如下。
@@ -46,7 +47,7 @@ co.wrap = function (fn) {
 
 /**
  * 执行generator，返回一个promise对象
- * 即将整个fn包在主promise中
+ * 首次调用即将整个fn包在主promise中
  */
 
 function co(gen) {
@@ -117,13 +118,14 @@ function co(gen) {
  * 1、非object的基本数据类型===>直接返回
  * 2、promise===>直接返回
  * 3、Generator对象和方法===> co调用
- * 4、Function 回调函数===>thunkToPromise
+ * 4、thunk函数===>thunkToPromise
  * 5、Object  ===>objectToPromise 
  */
 
 function toPromise(obj) {
   if (!obj) return obj;
   if (isPromise(obj)) return obj;
+  // 主要看这里，能转化为generator函数的最终都要再次调用co函数，生成子promise，这样就完成了循环调用
   if (isGeneratorFunction(obj) || isGenerator(obj)) return co.call(this, obj);
   if ('function' == typeof obj) return thunkToPromise.call(this, obj);
   if (Array.isArray(obj)) return arrayToPromise.call(this, obj);
