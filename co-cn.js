@@ -40,7 +40,7 @@ co.wrap = function (fn) {
 
 /**
  * 执行generator，返回一个promise对象
- * 即将整个fn包在主promise中
+ * 首次调用即将整个fn包在主promise中
  */
 
 function co(gen) {
@@ -111,7 +111,7 @@ function co(gen) {
  * 1、非object的基本数据类型===>直接返回
  * 2、promise===>直接返回
  * 3、Generator对象和方法===> co调用
- * 4、Function 回调函数===>thunkToPromise
+ * 4、thunk函数===>thunkToPromise
  * 5、Object  ===>objectToPromise 
  */
 
